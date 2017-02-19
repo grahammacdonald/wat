@@ -1,4 +1,4 @@
-CSC 204 Group Project: Untitled
+CSC 205 Group Project: Untitled
 ===================
 
 What is it?
