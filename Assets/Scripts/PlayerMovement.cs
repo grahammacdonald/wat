@@ -24,8 +24,8 @@ public class PlayerMovement : MonoBehaviour {
 	private float buoyancy 			= 0.5f;
 	private float speed 			= 5;
 	private float verticalVelocity	= 0.0f;
-	private float minWidth			= -2.5f;
-	private float maxWidth			= 2.5f;
+	public float minWidth			= -2.5f;
+	public float maxWidth			= 2.5f;
 
 
 	private void Start () 
