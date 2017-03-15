@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour {
 
-	public GameObject[] tilePrefabs;
+	public GameObject[] tiles;
 	private Transform playerTransform;
+	public NewTile spawner;
 
 	//Constants
 	private float playerTilePosition	= 0;
 	private float spawnZ 				= 0.0f;
 	private int tilesConstant			= 7;
-	private float tileLength			= 10;
+	private float tileLength			= 100;
 
 
-	private void Start () 
+	void Start () 
 	{
 		playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+		spawner = gameObject.GetComponent<NewTile> ();
+		tiles = new GameObject[15];
 
 		//Spawning Initial tile prefabs
 		for (int i = 0; i < tilesConstant; i++) 
@@ -25,7 +28,7 @@ public class TileManager : MonoBehaviour {
 		}
 	}
 	
-	private void Update () 
+	void Update () 
 	{
 
 		playerTilePosition = spawnZ - (tilesConstant * tileLength);
@@ -33,14 +36,33 @@ public class TileManager : MonoBehaviour {
 		{
 			SpawnTile ();
 		}
+
+		//Iterate through the 
+		for (int i = 0; i < tiles.Length; i++) {
+			if (tiles [i] != null) {
+				if (tiles[i].transform.position.z < playerTransform.position.z - tileLength) {
+					Destroy (tiles [i]);
+				}
+			}
+		}
 		
 	}
 
 	private void SpawnTile(int prefabIndex = -1)
 	{
 		GameObject go;
-		go = Instantiate (tilePrefabs [0]) as GameObject;
+		//Calls spawner code to create a new tile ahead of object
+		go = spawner.SpawnTile ();
 		go.transform.SetParent (transform);
+
+
+		//Moves new tile into a emtpy spot in the array of game tiles
+		for (int i = 0; i < tiles.Length; i++) {
+			if (tiles [i] == null) {
+				tiles [i] = go;
+				break;
+			}
+		}
 
 		/*
 		 * In Start function, 7 tiles are immidetially created. 
