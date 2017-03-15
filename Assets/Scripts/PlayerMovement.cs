@@ -8,23 +8,54 @@ public class PlayerMovement : MonoBehaviour {
 	private Vector3 			moveVector;
 	private Vector3 			positionVector;
 
+	//Player Attributes
+	public float 				red;
+	public float 				green;
+	public float 				blue;
+	public ParticleSystem 		smoke;
+	private Color 				smokeColour;
+
+	//FrameCounter
+	private int 				framz;
+	public int					smokeDelay;
+
 	//Constants
 	private float animationDuration = 4.0f;
-	private float gravity 			= 12.0f;
+	private float buoyancy 			= 0.5f;
 	private float speed 			= 5;
 	private float verticalVelocity	= 0.0f;
-	private float minWidth			= -2.5f;
-	private float maxWidth			= 2.5f;
+	public float minWidth			= -2.5f;
+	public float maxWidth			= 2.5f;
 
 
 	private void Start () 
 	{
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
+
+		//set Player start attributes
+		red = 1;
+		green = 1;
+		blue = 1;
+		smokeColour = new Color(red, green, blue, 1f);
+		framz = 0;
+
 	}
 	
 	private void Update () 
 	{
+
+		//Update smoke colour. The if statement allows for fewer particles to be generated, editable from unity interface.
+		if (framz > smokeDelay) {
+			var emitParams = new ParticleSystem.EmitParams ();
+			emitParams.startColor = smokeColour;
+			smoke.Emit (emitParams, 1);
+			framz = 0;
+		}
+		framz++;
+
+		//testing colour change --> it works
+		//smokeColour = Random.ColorHSV();
 
 		/*
 		 * Restricts player from moving left and right until the camera animation is complete
@@ -51,19 +82,20 @@ public class PlayerMovement : MonoBehaviour {
 
 
 		/* 
-		 * Y is for vertical movement, such as gravity and jumping, ducking
-		 * Here we make a simple gravity function. When the object is not touching the ground, 
+		 * Y is for vertical movement, such as buoyancy
+		 * Here we make a simple buoyancy function. When the object is not touching the ground, 
 		 * every second vertical velocity is increased. Otherwise, it is constant
 		*/
+		moveVector.y = Input.GetAxis("Vertical") * speed;
 
 		if (controller.isGrounded) 
 		{
-			verticalVelocity = -0.5f;
+			verticalVelocity = -0.01f;
 		} else 
 		{
-			verticalVelocity -= gravity * Time.deltaTime;
+			verticalVelocity -= buoyancy * Time.deltaTime;
 		}
-		moveVector.y = verticalVelocity;
+		moveVector.y += verticalVelocity;
 
 
 
@@ -75,6 +107,7 @@ public class PlayerMovement : MonoBehaviour {
 		//Clamping
 		positionVector 		= transform.position;
 		positionVector.x 	= Mathf.Clamp (positionVector.x, minWidth, maxWidth);
+		positionVector.y 	= Mathf.Clamp (positionVector.y, minWidth, 2*maxWidth);
 		transform.position	= positionVector;
 
 		
