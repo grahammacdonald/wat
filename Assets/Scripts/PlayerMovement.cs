@@ -8,6 +8,17 @@ public class PlayerMovement : MonoBehaviour {
 	private Vector3 			moveVector;
 	private Vector3 			positionVector;
 
+	//Player Attributes
+	public float 				red;
+	public float 				green;
+	public float 				blue;
+	public ParticleSystem 		smoke;
+	private Color 				smokeColour;
+
+	//FrameCounter
+	private int 				framz;
+	public int					smokeDelay;
+
 	//Constants
 	private float animationDuration = 4.0f;
 	private float gravity 			= 12.0f;
@@ -21,10 +32,30 @@ public class PlayerMovement : MonoBehaviour {
 	{
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
+
+		//set Player start attributes
+		red = 1;
+		green = 1;
+		blue = 1;
+		smokeColour = new Color(red, green, blue, 1f);
+		framz = 0;
+
 	}
 	
 	private void Update () 
 	{
+
+		//Update smoke colour. The if statement allows for fewer particles to be generated, editable from unity interface.
+		if (framz > smokeDelay) {
+			var emitParams = new ParticleSystem.EmitParams ();
+			emitParams.startColor = smokeColour;
+			smoke.Emit (emitParams, 1);
+			framz = 0;
+		}
+		framz++;
+
+		//testing colour change --> it works
+		//smokeColour = Random.ColorHSV();
 
 		/*
 		 * Restricts player from moving left and right until the camera animation is complete
