@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	//Constants
 	private float animationDuration = 4.0f;
-	private float gravity 			= 12.0f;
+	private float gravity 			= 0.5f;
 	private float speed 			= 5;
 	private float verticalVelocity	= 0.0f;
 	private float minWidth			= -2.5f;
@@ -86,15 +86,16 @@ public class PlayerMovement : MonoBehaviour {
 		 * Here we make a simple gravity function. When the object is not touching the ground, 
 		 * every second vertical velocity is increased. Otherwise, it is constant
 		*/
+		moveVector.y = Input.GetAxis("Vertical") * speed;
 
 		if (controller.isGrounded) 
 		{
-			verticalVelocity = -0.5f;
+			verticalVelocity = -0.01f;
 		} else 
 		{
 			verticalVelocity -= gravity * Time.deltaTime;
 		}
-		moveVector.y = verticalVelocity;
+		moveVector.y += verticalVelocity;
 
 
 
@@ -106,6 +107,7 @@ public class PlayerMovement : MonoBehaviour {
 		//Clamping
 		positionVector 		= transform.position;
 		positionVector.x 	= Mathf.Clamp (positionVector.x, minWidth, maxWidth);
+		positionVector.y 	= Mathf.Clamp (positionVector.y, minWidth, 2*maxWidth);
 		transform.position	= positionVector;
 
 		
