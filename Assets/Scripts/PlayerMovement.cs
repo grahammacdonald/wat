@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	//Constants
 	private float animationDuration = 4.0f;
-	private float gravity 			= 0.5f;
+	private float buoyancy 			= 0.5f;
 	private float speed 			= 5;
 	private float verticalVelocity	= 0.0f;
 	private float minWidth			= -2.5f;
@@ -82,8 +82,8 @@ public class PlayerMovement : MonoBehaviour {
 
 
 		/* 
-		 * Y is for vertical movement, such as gravity and jumping, ducking
-		 * Here we make a simple gravity function. When the object is not touching the ground, 
+		 * Y is for vertical movement, such as buoyancy
+		 * Here we make a simple buoyancy function. When the object is not touching the ground, 
 		 * every second vertical velocity is increased. Otherwise, it is constant
 		*/
 		moveVector.y = Input.GetAxis("Vertical") * speed;
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour {
 			verticalVelocity = -0.01f;
 		} else 
 		{
-			verticalVelocity -= gravity * Time.deltaTime;
+			verticalVelocity -= buoyancy * Time.deltaTime;
 		}
 		moveVector.y += verticalVelocity;
 
