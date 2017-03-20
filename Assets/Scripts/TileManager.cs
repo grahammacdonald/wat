@@ -117,8 +117,7 @@ public class TileManager : MonoBehaviour {
             }
         }
         //fishes forward position is related to the location of tiles spawning
-        #warning We need a random height generator for the fish's y location
-        go.transform.position = Vector3.forward * spawnZ;
+#warning We need a random height generator for the fish's y location
+        go.transform.position = new Vector3(0, Random.Range(0, 6.0f), spawnZ);
     }
-
 }
