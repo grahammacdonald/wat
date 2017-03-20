@@ -24,8 +24,8 @@ public class PlayerMovement : MonoBehaviour {
 	private float buoyancy 			= 0.5f;
 	private float speed 			= 5;
 	private float verticalVelocity	= 0.0f;
-	public float minWidth			= -2.5f;
-	public float maxWidth			= 5f;
+	public float minWidth			= 0f;
+	public float maxWidth			= 10f;
 
 
 	private void Start () 
@@ -45,17 +45,7 @@ public class PlayerMovement : MonoBehaviour {
 	private void Update () 
 	{
 
-		//Update smoke colour. The if statement allows for fewer particles to be generated, editable from unity interface.
-		smokeColour = new Color(red, green, blue, 1f);
 
-		if (framz > smokeDelay) {
-			var emitParams = new ParticleSystem.EmitParams ();
-			emitParams.position = gameObject.transform.position;
-			emitParams.startColor = smokeColour;
-			smoke.Emit (emitParams, 1);
-			framz = 0;
-		}
-		framz++;
 
 		//testing colour change --> it works
 		//smokeColour = Random.ColorHSV();
@@ -114,9 +104,22 @@ public class PlayerMovement : MonoBehaviour {
 		positionVector 		= transform.position;
 		//Not Needed now
 		//positionVector.x 	= Mathf.Clamp (positionVector.x, minWidth, maxWidth);
-		positionVector.y 	= Mathf.Clamp (positionVector.y, minWidth, maxWidth);
+		positionVector.y 	= Mathf.Clamp (positionVector.y, minWidth, 2*maxWidth);
 		transform.position	= positionVector;
 
+
+		//Update smoke colour. The if statement allows for fewer particles to be generated, editable from unity interface.
+		smokeColour = new Color(red, green, blue, 1f);
+
+		if (framz > smokeDelay) {
+			var emitParams = new ParticleSystem.EmitParams ();
+			emitParams.position = transform.position;
+			Debug.Log (emitParams.position);
+			emitParams.startColor = smokeColour;
+			smoke.Emit (emitParams, 1);
+			framz = 0;
+		}
+		framz++;
 		
 	}
 }
