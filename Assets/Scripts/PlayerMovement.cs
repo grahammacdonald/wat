@@ -113,7 +113,7 @@ public class PlayerMovement : MonoBehaviour {
 
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
-			emitParams.position = transform.position;
+			//emitParams.position = transform.position;
 			Debug.Log (emitParams.position);
 			emitParams.startColor = smokeColour;
 			smoke.Emit (emitParams, 1);
