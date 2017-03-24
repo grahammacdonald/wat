@@ -14,6 +14,7 @@ public class Player : MonoBehaviour {
 	public float 				blue;
 	public ParticleSystem 		smoke;
 	private Color 				smokeColour;
+    public Color               oceanColor;
 
 	//FrameCounter
 	private int 				framz;
@@ -39,6 +40,7 @@ public class Player : MonoBehaviour {
 		blue = 1;
 		smokeColour = new Color(red, green, blue, 1f);
 		framz = 0;
+        oceanColor = new Color(0, 0, 1, 1);
 
 	}
 	
@@ -114,7 +116,7 @@ public class Player : MonoBehaviour {
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
 			//emitParams.position = transform.position;
-			Debug.Log (emitParams.position);
+			//Debug.Log (emitParams.position);
 			emitParams.startColor = smokeColour;
 			smoke.Emit (emitParams, 1);
 			framz = 0;
@@ -122,4 +124,11 @@ public class Player : MonoBehaviour {
 		framz++;
 		
 	}
+
+    public void EatFishColor(Color color)
+    {
+        print("EatFishColor Called ocean Color updated");
+
+        oceanColor += color;
+    }
 }

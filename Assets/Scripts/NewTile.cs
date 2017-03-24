@@ -23,8 +23,6 @@ public class NewTile : MonoBehaviour {
     public GameObject SpawnFish()
     {
         GameObject go;
-#warning We need to add color to fish
-#warning We need to interpolate the fish's size possibly
         go = Instantiate(fishPrefab) as GameObject;
         return go;
     }
