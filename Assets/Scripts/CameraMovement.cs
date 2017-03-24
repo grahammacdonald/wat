@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraMovement : MonoBehaviour {
+
+	//Countdown timer
+	public Text 		countText;
+	private float 		countNum = 5;
 
 	private Transform	lookAt;
 	private Vector3 	startOffset;
@@ -11,11 +16,11 @@ public class CameraMovement : MonoBehaviour {
 	//Constants
 	private float animationDuration = 4.0f;
 	private float transition 		= 0.0f;
-	private Vector3 animationOffset	= new Vector3 (0, 3, 2);
+	private Vector3 animationOffset	= new Vector3 (-10, 0, -10);
 
 	// Max and min height clamp of Camera. Relevant for stair climbing, jumping etc.
-	private int heightMax = 5;
-	private int heightMin = 3;
+	private int heightMax = 6;
+	private int heightMin = 6;
 
 
 	private void Start () 
@@ -40,7 +45,7 @@ public class CameraMovement : MonoBehaviour {
 
 		moveVector.y = Mathf.Clamp(moveVector.y, heightMin, heightMax);
 
-		moveVector.x = Mathf.Clamp(moveVector.x, 4, 7);
+		moveVector.x = Mathf.Clamp(moveVector.x, 15, 16);
 
 
 		// transition value starts at 0 and reaches 1 when start camera animation is complete
@@ -48,6 +53,7 @@ public class CameraMovement : MonoBehaviour {
 		if (transition > 1.0f) 
 		{
 			transform.position = moveVector;
+			countText.text = "";
 		} else 
 		{
 			/*
@@ -55,7 +61,10 @@ public class CameraMovement : MonoBehaviour {
 			*/
 			transform.position = Vector3.Lerp (moveVector + animationOffset, moveVector, transition);
 			transition += Time.deltaTime * (1 / animationDuration);
+			countNum -= Time.deltaTime * (5 / animationDuration);
 			transform.LookAt (lookAt.position);
+
+			countText.text = "" + Mathf.Ceil (countNum);
 		}
 
 	}
