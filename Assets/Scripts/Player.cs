@@ -52,6 +52,8 @@ public class Player : MonoBehaviour {
 	
 	private void Update () 
 	{
+		//Does colour imbalance exist?
+		isBalanced();
 
 		//if all colours reach the bottom, and in balance, push them all back up
 		if (red < colourMult + 10 && green < colourMult + 10 && blue < colourMult + 10) {
