@@ -9,12 +9,13 @@ public class Player : MonoBehaviour {
 	private Vector3 			positionVector;
 
 	//Player Attributes
-	public  float 				red 	= 100f;
-	public  float 				green 	= 100f;
-	public  float 				blue 	= 100f;
+	public  float 				red;
+	public  float 				green;
+	public  float 				blue;
 	public  ParticleSystem 		smoke;
 	private Color 				smokeColour;
     public  Color               oceanColor;
+	public int 					difference;
 
 	//FrameCounter
 	private int 				framz;
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour {
 	public float 	minWidth			= 0f;
 	public float 	maxWidth			= 10f;
     private float 	health				= 100f;
-	public float 	healthMult			= 5;
+	public float 	colourMult			= 5;
 
 
 
@@ -36,6 +37,11 @@ public class Player : MonoBehaviour {
 	{
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
+
+		//set colour start values
+		red 	= 100f;
+		green 	= 100f;
+		blue 	= 100f;
 
 		//set Player start attributes Colour is between 0 and 1
 		smokeColour = new Color(1f, 1f, 1f, 1f);
@@ -46,8 +52,21 @@ public class Player : MonoBehaviour {
 	
 	private void Update () 
 	{
+		//Does colour imbalance exist?
+		isBalanced();
 
+		//if all colours reach the bottom, and in balance, push them all back up
+		if (red < colourMult + 10 && green < colourMult + 10 && blue < colourMult + 10) {
+			red += Mathf.Max (colourMult, 50f);
+			green += Mathf.Max (colourMult, 50f);
+			blue += Mathf.Max (colourMult, 50f);
 
+		}
+
+		//Keep colour values between 0 and 100 to represent valid colours
+		red	= Mathf.Clamp (red, 0, 100);
+		green = Mathf.Clamp (green, 0, 100);
+		blue = Mathf.Clamp (blue, 0, 100);
 
 		//testing colour change --> it works
 		//smokeColour = Random.ColorHSV();
@@ -118,7 +137,6 @@ public class Player : MonoBehaviour {
 
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
-			//emitParams.position = transform.position;
 			//Debug.Log (emitParams.position);
 			emitParams.startColor = smokeColour;
 			smoke.Emit (emitParams, 1);
@@ -135,21 +153,20 @@ public class Player : MonoBehaviour {
 		oceanColor += color;
 
 		//hitting fish changes the colour attributes of the player representing colour which changes the smoke colour
-		//The original idea we has was representing the health as the colour, not a seperate variable and i have set this up to be used
-		red -= healthMult * color.r;
-		green -= healthMult * color.g;
-		blue -= healthMult * color.b;
+		red -= colourMult * color.r;
+		green -= colourMult * color.g;
+		blue -= colourMult * color.b;
 
 
 		//if we want to only remove the largest colour aspect of the fish use the below code instead of above.
 		/*{
 			float r = color.r, g = color.g, b = color.b;
 			if (r > g && r > b)
-				red -= healthMult * color.r;
+				red -= colourMult * color.r;
 			else if (g > r && g > b)
-				green -= healthMult * color.g;
+				green -= colourMult * color.g;
 			else
-				blue -= healthMult * color.b;
+				blue -= colourMult * color.b;
 					
 		}*/
 
@@ -158,9 +175,6 @@ public class Player : MonoBehaviour {
     public void AffectHealth(float healthImpact)
     {
         health += healthImpact;
-		//I thought we were using the colour to represent health, not another variable
-		//I set this up to affect the colour of the smoke.
-		//Alternatvly, we could have this second health be the alpha of the smoke to show the health.
     }
 
     //Remove Health if fish is alive at a rate of 1 unit per second
@@ -179,4 +193,24 @@ public class Player : MonoBehaviour {
             }
         }
     }
+
+
+	//Method here will find the difference between colours and if unbalance is great enough, will take action
+	private void isBalanced () {
+		int colourOut;
+		//is there a colour imbalance?
+		if (Mathf.Max (red, green, blue) > Mathf.Min (red, green, blue) + difference) {
+
+			if (red > green && red > blue)
+				colourOut = 0;
+			else if (green > red && green > blue)
+				colourOut = 1;
+			else
+				colourOut = 2;
+		} else
+			return;
+
+		//Here we can spawn monsters when the colour impalance is great enough. 
+		//The colour of monster to spawn is based on the value colourOut: 0 == red, 1 == green, 2 == blue
+	}
 }
