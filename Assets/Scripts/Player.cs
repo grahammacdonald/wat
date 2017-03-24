@@ -47,11 +47,17 @@ public class Player : MonoBehaviour {
 	private void Update () 
 	{
 
-		if (red < colourMult + 10 || green < colourMult + 10 || blue < colourMult + 10) {
-			red += Mathf.Max (colourMult, 10f);
-			green += Mathf.Max (colourMult, 10f);
-			blue += Mathf.Max (colourMult, 10f);
+		//if all colours reach the bottom, and in balance, push them all back up
+		if (red < colourMult + 10 && green < colourMult + 10 && blue < colourMult + 10) {
+			red += Mathf.Max (colourMult, 50f);
+			green += Mathf.Max (colourMult, 50f);
+			blue += Mathf.Max (colourMult, 50f);
+
 		}
+
+		red	= Mathf.Clamp (red, 0, 100);
+		green = Mathf.Clamp (green, 0, 100);
+		blue = Mathf.Clamp (blue, 0, 100);
 
 		//testing colour change --> it works
 		//smokeColour = Random.ColorHSV();

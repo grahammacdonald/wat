@@ -28,8 +28,10 @@ public class TileManager : MonoBehaviour {
         //Spawning Initial tile prefabs
         for (int i = 0; i < tilesConstant; i++) 
 		{
-			SpawnTile ();
-            SpawnFish ();
+			if (i == 0)
+				SpawnTile (false);
+			else
+				SpawnTile (true);
 		}
 
 
@@ -42,9 +44,7 @@ public class TileManager : MonoBehaviour {
 
         if (playerTransform.position.z > playerTilePosition) 
 		{
-			SpawnTile ();
-            SpawnFish();
-
+			SpawnTile (true);
         }
 
         //Iterate through the tiles
@@ -55,26 +55,14 @@ public class TileManager : MonoBehaviour {
 				}
 			}
 		}
-
-        //Left behind fish deletion
-        for (int j = 0; j < fishes.Length; j++)
-        {
-            if (fishes[j] != null)
-            {
-                if (fishes[j].transform.position.z < playerTransform.position.z - tileLength)
-                {
-                    Destroy(fishes[j]);
-                }
-            }
-        }
-
+			
     }
 
-	private void SpawnTile(int prefabIndex = -1)
+	private void SpawnTile(bool fish, int prefabIndex = -1)
 	{
 		GameObject go;
 		//Calls spawner code to create a new tile ahead of object
-		go = spawner.SpawnTile ();
+		go = spawner.SpawnTile (fish);
 		go.transform.SetParent (transform);
 
 
@@ -95,7 +83,7 @@ public class TileManager : MonoBehaviour {
 		spawnZ += tileLength;
 	}
 
-    private void SpawnFish(int prefabIndex = -1)
+   /* private void SpawnFish(int prefabIndex = -1)
     {
         GameObject go;
 
@@ -115,5 +103,5 @@ public class TileManager : MonoBehaviour {
         }
         //fishes forward position is related to the location of tiles spawning
         go.transform.position = new Vector3(0, Random.Range(0, 6.0f), spawnZ);
-    }
+    }*/
 }
