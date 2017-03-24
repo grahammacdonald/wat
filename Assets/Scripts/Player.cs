@@ -9,12 +9,13 @@ public class Player : MonoBehaviour {
 	private Vector3 			positionVector;
 
 	//Player Attributes
-	public  float 				red 	= 100f;
-	public  float 				green 	= 100f;
-	public  float 				blue 	= 100f;
+	public  float 				red;
+	public  float 				green;
+	public  float 				blue;
 	public  ParticleSystem 		smoke;
 	private Color 				smokeColour;
     public  Color               oceanColor;
+	public int 					difference;
 
 	//FrameCounter
 	private int 				framz;
@@ -37,6 +38,11 @@ public class Player : MonoBehaviour {
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
 
+		//set colour start values
+		red 	= 100f;
+		green 	= 100f;
+		blue 	= 100f;
+
 		//set Player start attributes Colour is between 0 and 1
 		smokeColour = new Color(1f, 1f, 1f, 1f);
 		framz = 0;
@@ -55,6 +61,7 @@ public class Player : MonoBehaviour {
 
 		}
 
+		//Keep colour values between 0 and 100 to represent valid colours
 		red	= Mathf.Clamp (red, 0, 100);
 		green = Mathf.Clamp (green, 0, 100);
 		blue = Mathf.Clamp (blue, 0, 100);
@@ -184,4 +191,24 @@ public class Player : MonoBehaviour {
             }
         }
     }
+
+
+	//Method here will find the difference between colours and if unbalance is great enough, will take action
+	private void isBalanced () {
+		int colourOut;
+		//is there a colour imbalance?
+		if (Mathf.Max (red, green, blue) > Mathf.Min (red, green, blue) + difference) {
+
+			if (red > green && red > blue)
+				colourOut = 0;
+			else if (green > red && green > blue)
+				colourOut = 1;
+			else
+				colourOut = 2;
+		} else
+			return;
+
+		//Here we can spawn monsters when the colour impalance is great enough. 
+		//The colour of monster to spawn is based on the value colourOut: 0 == red, 1 == green, 2 == blue
+	}
 }
