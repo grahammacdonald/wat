@@ -9,12 +9,12 @@ public class Player : MonoBehaviour {
 	private Vector3 			positionVector;
 
 	//Player Attributes
-	public float 				red;
-	public float 				green;
-	public float 				blue;
-	public ParticleSystem 		smoke;
+	public  float 				red;
+	public  float 				green;
+	public  float 				blue;
+	public  ParticleSystem 		smoke;
 	private Color 				smokeColour;
-    public Color               oceanColor;
+    public  Color               oceanColor;
 
 	//FrameCounter
 	private int 				framz;
@@ -27,9 +27,11 @@ public class Player : MonoBehaviour {
 	private float verticalVelocity	= 0.0f;
 	public float minWidth			= 0f;
 	public float maxWidth			= 10f;
+    private float health              = 100f;
 
 
-	private void Start () 
+
+    private void Start () 
 	{
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
@@ -127,8 +129,28 @@ public class Player : MonoBehaviour {
 
     public void EatFishColor(Color color)
     {
-        print("EatFishColor Called ocean Color updated");
-
         oceanColor += color;
+    }
+
+    public void AffectHealth(float healthImpact)
+    {
+        health += healthImpact;
+    }
+
+    //Remove Health if fish is alive at a rate of 1 unit per second
+    IEnumerator removeHealth()
+    {
+        while (true)
+        {
+            if (health > 0f)
+            { // if health > 0
+                health -= 1f; // reduce health and wait 1 second
+                yield return new WaitForSeconds(1);
+            }
+            else
+            { // if health < 0
+                yield return null;
+            }
+        }
     }
 }

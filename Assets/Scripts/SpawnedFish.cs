@@ -8,12 +8,14 @@ public class SpawnedFish : MonoBehaviour {
 
     private Color   fishColor;
     private Player  Player;
+    private float     health;
  
 
 	void Start () {
         //Parameters ColorHSV(float hueMin, float hueMax, float saturationMin, float saturationMax, float valueMin, float valueMax);
         fishColor                               = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
         GetComponent<Renderer>().material.color = fishColor;
+        health =  Random.Range(20f, 50f);
     }
 
     void OnTriggerEnter(Collider other)
@@ -21,9 +23,9 @@ public class SpawnedFish : MonoBehaviour {
 
         if (other.tag == "Player")
         {
-            print("Colision for color");
             Player Player = other.GetComponent<Player>();
             Player.EatFishColor(fishColor);
+            Player.AffectHealth(health);
         }
        
 

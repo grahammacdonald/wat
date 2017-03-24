@@ -11,13 +11,10 @@ public class TileManager : MonoBehaviour {
 	public NewTile spawner;
 
     //Constants
-    private float playerFishPosition    = 0;
     private float playerTilePosition	= 0;
 	private float spawnZ 				= 0.0f;
 	private int   tilesConstant			= 7;
 	private float tileLength			= 100;
-    private float spawnDistance         = 0.0f;
-    private float fishConstant          = 5.0f;
 
 
 
@@ -117,7 +114,6 @@ public class TileManager : MonoBehaviour {
             }
         }
         //fishes forward position is related to the location of tiles spawning
-#warning We need a random height generator for the fish's y location
         go.transform.position = new Vector3(0, Random.Range(0, 6.0f), spawnZ);
     }
 }
