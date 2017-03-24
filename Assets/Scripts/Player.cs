@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
 	public float 	minWidth			= 0f;
 	public float 	maxWidth			= 10f;
     private float 	health				= 100f;
-	public float 	healthMult			= 5;
+	public float 	colourMult			= 5;
 
 
 
@@ -47,7 +47,11 @@ public class Player : MonoBehaviour {
 	private void Update () 
 	{
 
-
+		if (red < colourMult + 10 || green < colourMult + 10 || blue < colourMult + 10) {
+			red += Mathf.Max (colourMult, 10f);
+			green += Mathf.Max (colourMult, 10f);
+			blue += Mathf.Max (colourMult, 10f);
+		}
 
 		//testing colour change --> it works
 		//smokeColour = Random.ColorHSV();
@@ -118,7 +122,6 @@ public class Player : MonoBehaviour {
 
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
-			//emitParams.position = transform.position;
 			//Debug.Log (emitParams.position);
 			emitParams.startColor = smokeColour;
 			smoke.Emit (emitParams, 1);
@@ -135,21 +138,20 @@ public class Player : MonoBehaviour {
 		oceanColor += color;
 
 		//hitting fish changes the colour attributes of the player representing colour which changes the smoke colour
-		//The original idea we has was representing the health as the colour, not a seperate variable and i have set this up to be used
-		red -= healthMult * color.r;
-		green -= healthMult * color.g;
-		blue -= healthMult * color.b;
+		red -= colourMult * color.r;
+		green -= colourMult * color.g;
+		blue -= colourMult * color.b;
 
 
 		//if we want to only remove the largest colour aspect of the fish use the below code instead of above.
 		/*{
 			float r = color.r, g = color.g, b = color.b;
 			if (r > g && r > b)
-				red -= healthMult * color.r;
+				red -= colourMult * color.r;
 			else if (g > r && g > b)
-				green -= healthMult * color.g;
+				green -= colourMult * color.g;
 			else
-				blue -= healthMult * color.b;
+				blue -= colourMult * color.b;
 					
 		}*/
 
@@ -158,9 +160,6 @@ public class Player : MonoBehaviour {
     public void AffectHealth(float healthImpact)
     {
         health += healthImpact;
-		//I thought we were using the colour to represent health, not another variable
-		//I set this up to affect the colour of the smoke.
-		//Alternatvly, we could have this second health be the alpha of the smoke to show the health.
     }
 
     //Remove Health if fish is alive at a rate of 1 unit per second
