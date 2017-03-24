@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class Player : MonoBehaviour {
 
 	private CharacterController	controller;
 	private Vector3 			moveVector;
 	private Vector3 			positionVector;
 
 	//Player Attributes
-	public float 				red;
-	public float 				green;
-	public float 				blue;
-	public ParticleSystem 		smoke;
+	public  float 				red;
+	public  float 				green;
+	public  float 				blue;
+	public  ParticleSystem 		smoke;
 	private Color 				smokeColour;
+    public  Color               oceanColor;
 
 	//FrameCounter
 	private int 				framz;
@@ -26,9 +27,11 @@ public class PlayerMovement : MonoBehaviour {
 	private float verticalVelocity	= 0.0f;
 	public float minWidth			= 0f;
 	public float maxWidth			= 10f;
+    private float health              = 100f;
 
 
-	private void Start () 
+
+    private void Start () 
 	{
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
@@ -39,6 +42,7 @@ public class PlayerMovement : MonoBehaviour {
 		blue = 1;
 		smokeColour = new Color(red, green, blue, 1f);
 		framz = 0;
+        oceanColor = new Color(0, 0, 1, 1);
 
 	}
 	
@@ -114,7 +118,7 @@ public class PlayerMovement : MonoBehaviour {
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
 			//emitParams.position = transform.position;
-			Debug.Log (emitParams.position);
+			//Debug.Log (emitParams.position);
 			emitParams.startColor = smokeColour;
 			smoke.Emit (emitParams, 1);
 			framz = 0;
@@ -122,4 +126,31 @@ public class PlayerMovement : MonoBehaviour {
 		framz++;
 		
 	}
+
+    public void EatFishColor(Color color)
+    {
+        oceanColor += color;
+    }
+
+    public void AffectHealth(float healthImpact)
+    {
+        health += healthImpact;
+    }
+
+    //Remove Health if fish is alive at a rate of 1 unit per second
+    IEnumerator removeHealth()
+    {
+        while (true)
+        {
+            if (health > 0f)
+            { // if health > 0
+                health -= 1f; // reduce health and wait 1 second
+                yield return new WaitForSeconds(1);
+            }
+            else
+            { // if health < 0
+                yield return null;
+            }
+        }
+    }
 }
