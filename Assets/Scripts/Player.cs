@@ -130,12 +130,29 @@ public class Player : MonoBehaviour {
 
     public void EatFishColor(Color color)
     {
-        oceanColor += color;
+		//Debug.Log (color.r + " " + color.g + " " + color.b + " ");
 
-		//hitting fish changes the colour attributes of the player which changes the smoke colour
+		oceanColor += color;
+
+		//hitting fish changes the colour attributes of the player representing colour which changes the smoke colour
+		//The original idea we has was representing the health as the colour, not a seperate variable and i have set this up to be used
 		red -= healthMult * color.r;
-		blue -= healthMult * color.b;
 		green -= healthMult * color.g;
+		blue -= healthMult * color.b;
+
+
+		//if we want to only remove the largest colour aspect of the fish use the below code instead of above.
+		/*{
+			float r = color.r, g = color.g, b = color.b;
+			if (r > g && r > b)
+				red -= healthMult * color.r;
+			else if (g > r && g > b)
+				green -= healthMult * color.g;
+			else
+				blue -= healthMult * color.b;
+					
+		}*/
+
     }
 
     public void AffectHealth(float healthImpact)
