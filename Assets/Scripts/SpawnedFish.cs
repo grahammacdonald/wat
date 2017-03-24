@@ -6,9 +6,9 @@ public class SpawnedFish : MonoBehaviour {
 
     // Use this for initialization
 
-    private Color   fishColor;
-    private Player  Player;
-    private float     health;
+	private Color   	fishColor;
+    private Player  	Player;
+    private float     	health;
  
 
 	void Start () {

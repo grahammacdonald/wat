@@ -47,7 +47,7 @@ public class TileManager : MonoBehaviour {
 
         }
 
-        //Iterate through the 
+        //Iterate through the tiles
         for (int i = 0; i < tiles.Length; i++) {
 			if (tiles [i] != null) {
 				if (tiles[i].transform.position.z < playerTransform.position.z - tileLength) {

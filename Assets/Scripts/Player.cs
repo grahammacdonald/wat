@@ -9,9 +9,9 @@ public class Player : MonoBehaviour {
 	private Vector3 			positionVector;
 
 	//Player Attributes
-	public  float 				red;
-	public  float 				green;
-	public  float 				blue;
+	public  float 				red 	= 100f;
+	public  float 				green 	= 100f;
+	public  float 				blue 	= 100f;
 	public  ParticleSystem 		smoke;
 	private Color 				smokeColour;
     public  Color               oceanColor;
@@ -21,13 +21,14 @@ public class Player : MonoBehaviour {
 	public int					smokeDelay;
 
 	//Constants
-	private float animationDuration = 4.0f;
-	private float buoyancy 			= 0.5f;
-	private float speed 			= 5;
-	private float verticalVelocity	= 0.0f;
-	public float minWidth			= 0f;
-	public float maxWidth			= 10f;
-    private float health              = 100f;
+	private float 	animationDuration 	= 4.0f;
+	private float 	buoyancy 			= 0.5f;
+	private float 	speed 				= 5f;
+	private float 	verticalVelocity	= 0.0f;
+	public float 	minWidth			= 0f;
+	public float 	maxWidth			= 10f;
+    private float 	health				= 100f;
+	public float 	healthMult			= 5;
 
 
 
@@ -37,10 +38,7 @@ public class Player : MonoBehaviour {
 		positionVector = transform.position;
 
 		//set Player start attributes Colour is between 0 and 1
-		red = 1;
-		green = 1;
-		blue = 1;
-		smokeColour = new Color(red, green, blue, 1f);
+		smokeColour = new Color(1f, 1f, 1f, 1f);
 		framz = 0;
         oceanColor = new Color(0, 0, 1, 1);
 
@@ -113,7 +111,10 @@ public class Player : MonoBehaviour {
 
 
 		//Update smoke colour. The if statement allows for fewer particles to be generated, editable from unity interface.
-		smokeColour = new Color(red, green, blue, 1f);
+		smokeColour = new Color(red/100f, green/100f, blue/100f, 1f);
+
+		//If health will effect the alpha, comment out above line and use the one below
+		//smokeColour = new Color(red/100f, green/100f, blue/100f, health/100f);
 
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
@@ -129,12 +130,37 @@ public class Player : MonoBehaviour {
 
     public void EatFishColor(Color color)
     {
-        oceanColor += color;
+		//Debug.Log (color.r + " " + color.g + " " + color.b + " ");
+
+		oceanColor += color;
+
+		//hitting fish changes the colour attributes of the player representing colour which changes the smoke colour
+		//The original idea we has was representing the health as the colour, not a seperate variable and i have set this up to be used
+		red -= healthMult * color.r;
+		green -= healthMult * color.g;
+		blue -= healthMult * color.b;
+
+
+		//if we want to only remove the largest colour aspect of the fish use the below code instead of above.
+		/*{
+			float r = color.r, g = color.g, b = color.b;
+			if (r > g && r > b)
+				red -= healthMult * color.r;
+			else if (g > r && g > b)
+				green -= healthMult * color.g;
+			else
+				blue -= healthMult * color.b;
+					
+		}*/
+
     }
 
     public void AffectHealth(float healthImpact)
     {
         health += healthImpact;
+		//I thought we were using the colour to represent health, not another variable
+		//I set this up to affect the colour of the smoke.
+		//Alternatvly, we could have this second health be the alpha of the smoke to show the health.
     }
 
     //Remove Health if fish is alive at a rate of 1 unit per second
