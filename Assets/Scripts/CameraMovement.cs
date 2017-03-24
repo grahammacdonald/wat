@@ -19,8 +19,8 @@ public class CameraMovement : MonoBehaviour {
 	private Vector3 animationOffset	= new Vector3 (-10, 0, -10);
 
 	// Max and min height clamp of Camera. Relevant for stair climbing, jumping etc.
-	private int heightMax = 6;
-	private int heightMin = 6;
+	private int heightMax = 4;
+	private int heightMin = 4;
 
 
 	private void Start () 
@@ -53,6 +53,8 @@ public class CameraMovement : MonoBehaviour {
 		if (transition > 1.0f) 
 		{
 			transform.position = moveVector;
+
+			//remove countdown from screen
 			countText.text = "";
 		} else 
 		{
@@ -61,9 +63,12 @@ public class CameraMovement : MonoBehaviour {
 			*/
 			transform.position = Vector3.Lerp (moveVector + animationOffset, moveVector, transition);
 			transition += Time.deltaTime * (1 / animationDuration);
+
+			//Update countdown time
 			countNum -= Time.deltaTime * (5 / animationDuration);
 			transform.LookAt (lookAt.position);
 
+			//Print int representing countdown
 			countText.text = "" + Mathf.Ceil (countNum);
 		}
 
