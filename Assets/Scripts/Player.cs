@@ -16,6 +16,8 @@ public class Player : MonoBehaviour {
 	private Color 				smokeColour;
     public  Color               oceanColor;
 	public int 					difference;
+	private int 				timeGoing;
+	private int 				lastTime;
 
 	//FrameCounter
 	private int 				framz;
@@ -23,13 +25,15 @@ public class Player : MonoBehaviour {
 
 	//Constants
 	private float 	animationDuration 	= 4.0f;
-	private float 	buoyancy 			= 0.5f;
-	private float 	speed 				= 5f;
-	private float 	verticalVelocity	= 0.0f;
+	public float 	buoyancy 			= 0.5f;
+	public float 	horSpeed 			= 10f;
+	public float 	verSpeed 			= 10f;
+	private float 	verticalVelocity	= 0f;
 	public float 	minWidth			= 0f;
 	public float 	maxWidth			= 10f;
-    private float 	health				= 100f;
-	public float 	colourMult			= 5;
+    public float 	health				= 100f;
+	public float 	colourMult			= 10;
+	//private int 	difficulty			= 30;
 
 
 
@@ -37,6 +41,8 @@ public class Player : MonoBehaviour {
 	{
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
+
+		lastTime = 0;
 
 		//set colour start values
 		red 	= 100f;
@@ -52,6 +58,19 @@ public class Player : MonoBehaviour {
 	
 	private void Update () 
 	{
+
+		//See if second has gone by and remove health if yes
+		if (timeGoing > lastTime) {
+			lastTime = timeGoing;
+			health--;
+			if (timeGoing % 10 == 0) {
+				horSpeed ++;
+			}
+		}
+
+
+
+
 		//Does colour imbalance exist?
 		isBalanced();
 
@@ -77,7 +96,7 @@ public class Player : MonoBehaviour {
 
 		if (Time.time < animationDuration) 
 		{
-			controller.Move (Vector3.forward * speed * Time.deltaTime);
+			controller.Move (Vector3.forward * horSpeed * Time.deltaTime);
 			return;
 		}
 
@@ -102,7 +121,9 @@ public class Player : MonoBehaviour {
 		 * Here we make a simple buoyancy function. When the object is not touching the ground, 
 		 * every second vertical velocity is increased. Otherwise, it is constant
 		*/
-		moveVector.y = Input.GetAxis("Vertical") * speed;
+		moveVector.y = Input.GetAxis("Vertical") * verSpeed;
+
+
 
 		if (controller.isGrounded) 
 		{
@@ -110,14 +131,17 @@ public class Player : MonoBehaviour {
 			//verticalVelocity = -0.01f;
 		} else 
 		{
-			verticalVelocity -= buoyancy * Time.deltaTime;
+			//verticalVelocity -= buoyancy * Time.deltaTime;
+			verticalVelocity = -1 * buoyancy;
 		}
 		moveVector.y += verticalVelocity;
 
 
 
 		// Z is for forward movement
-		moveVector.z = speed;
+		moveVector.z = horSpeed;
+
+
 
 		controller.Move(moveVector * Time.deltaTime);
 
@@ -130,11 +154,14 @@ public class Player : MonoBehaviour {
 
 
 		//Update smoke colour. The if statement allows for fewer particles to be generated, editable from unity interface.
-		smokeColour = new Color(red/100f, green/100f, blue/100f, 1f);
+		//smokeColour = new Color(red/100f, green/100f, blue/100f, 1f);
 
 		//If health will effect the alpha, comment out above line and use the one below
-		//smokeColour = new Color(red/100f, green/100f, blue/100f, health/100f);
+		smokeColour = new Color(red/100f, green/100f, blue/100f, health/100f);
 
+
+		//Behnam CHANGE THIS -> smokeDelay is the number of frames that pass before another smoke particle is created
+		//A higher number means less smoke/bubbles
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
 			//Debug.Log (emitParams.position);
@@ -176,23 +203,7 @@ public class Player : MonoBehaviour {
     {
         health += healthImpact;
     }
-
-    //Remove Health if fish is alive at a rate of 1 unit per second
-    IEnumerator removeHealth()
-    {
-        while (true)
-        {
-            if (health > 0f)
-            { // if health > 0
-                health -= 1f; // reduce health and wait 1 second
-                yield return new WaitForSeconds(1);
-            }
-            else
-            { // if health < 0
-                yield return null;
-            }
-        }
-    }
+		
 
 
 	//Method here will find the difference between colours and if unbalance is great enough, will take action
@@ -201,9 +212,9 @@ public class Player : MonoBehaviour {
 		//is there a colour imbalance?
 		if (Mathf.Max (red, green, blue) > Mathf.Min (red, green, blue) + difference) {
 
-			if (red > green && red > blue)
+			if (red < green && red < blue)
 				colourOut = 0;
-			else if (green > red && green > blue)
+			else if (green < red && green < blue)
 				colourOut = 1;
 			else
 				colourOut = 2;
@@ -212,5 +223,23 @@ public class Player : MonoBehaviour {
 
 		//Here we can spawn monsters when the colour impalance is great enough. 
 		//The colour of monster to spawn is based on the value colourOut: 0 == red, 1 == green, 2 == blue
+	}
+
+
+	//Setter method to update the time variable
+	public void setTime (int newTime) {
+		timeGoing = newTime;
+	}
+
+	public int getMinColour () {
+		int colourOut;
+		if (red < green && red < blue)
+			colourOut = 0;
+		else if (green < red && green < blue)
+			colourOut = 1;
+		else
+			colourOut = 2;
+
+		return colourOut;
 	}
 }
