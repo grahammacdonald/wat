@@ -26,6 +26,7 @@ public class SpawnedFish : MonoBehaviour {
             Player Player = other.GetComponent<Player>();
             Player.EatFishColor(fishColor);
             Player.AffectHealth(health);
+			Destroy (gameObject);
         }
        
 
