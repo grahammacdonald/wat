@@ -32,7 +32,9 @@ public class NewTile : MonoBehaviour {
         GameObject go;
         go = Instantiate(fishPrefab) as GameObject;
 
+		//Parent of fish is the tile
 		go.transform.parent = tile;
+
 		go.transform.position = new Vector3(0, Random.Range(0, 6.0f), Random.Range(-25f, 25f));
 
         return go;

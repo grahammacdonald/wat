@@ -16,6 +16,8 @@ public class Player : MonoBehaviour {
 	private Color 				smokeColour;
     public  Color               oceanColor;
 	public int 					difference;
+	private int 				timeGoing;
+	private int 				lastTime;
 
 	//FrameCounter
 	private int 				framz;
@@ -24,12 +26,12 @@ public class Player : MonoBehaviour {
 	//Constants
 	private float 	animationDuration 	= 4.0f;
 	private float 	buoyancy 			= 0.5f;
-	private float 	speed 				= 5f;
-	private float 	verticalVelocity	= 0.0f;
+	private float 	speed 				= 10f;
+	private float 	verticalVelocity	= 0f;
 	public float 	minWidth			= 0f;
 	public float 	maxWidth			= 10f;
-    private float 	health				= 100f;
-	public float 	colourMult			= 5;
+    public float 	health				= 100f;
+	public float 	colourMult			= 10;
 
 
 
@@ -37,6 +39,8 @@ public class Player : MonoBehaviour {
 	{
 		controller = GetComponent<CharacterController> ();
 		positionVector = transform.position;
+
+		lastTime = 0;
 
 		//set colour start values
 		red 	= 100f;
@@ -52,6 +56,14 @@ public class Player : MonoBehaviour {
 	
 	private void Update () 
 	{
+
+		//See if second has gone by and remove health if yes
+		if (timeGoing > lastTime) {
+			lastTime = timeGoing;
+			health--;
+		}
+
+
 		//Does colour imbalance exist?
 		isBalanced();
 
@@ -130,10 +142,10 @@ public class Player : MonoBehaviour {
 
 
 		//Update smoke colour. The if statement allows for fewer particles to be generated, editable from unity interface.
-		smokeColour = new Color(red/100f, green/100f, blue/100f, 1f);
+		//smokeColour = new Color(red/100f, green/100f, blue/100f, 1f);
 
 		//If health will effect the alpha, comment out above line and use the one below
-		//smokeColour = new Color(red/100f, green/100f, blue/100f, health/100f);
+		smokeColour = new Color(red/100f, green/100f, blue/100f, health/100f);
 
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
@@ -176,23 +188,7 @@ public class Player : MonoBehaviour {
     {
         health += healthImpact;
     }
-
-    //Remove Health if fish is alive at a rate of 1 unit per second
-    IEnumerator removeHealth()
-    {
-        while (true)
-        {
-            if (health > 0f)
-            { // if health > 0
-                health -= 1f; // reduce health and wait 1 second
-                yield return new WaitForSeconds(1);
-            }
-            else
-            { // if health < 0
-                yield return null;
-            }
-        }
-    }
+		
 
 
 	//Method here will find the difference between colours and if unbalance is great enough, will take action
@@ -201,9 +197,9 @@ public class Player : MonoBehaviour {
 		//is there a colour imbalance?
 		if (Mathf.Max (red, green, blue) > Mathf.Min (red, green, blue) + difference) {
 
-			if (red > green && red > blue)
+			if (red < green && red < blue)
 				colourOut = 0;
-			else if (green > red && green > blue)
+			else if (green < red && green < blue)
 				colourOut = 1;
 			else
 				colourOut = 2;
@@ -212,5 +208,11 @@ public class Player : MonoBehaviour {
 
 		//Here we can spawn monsters when the colour impalance is great enough. 
 		//The colour of monster to spawn is based on the value colourOut: 0 == red, 1 == green, 2 == blue
+	}
+
+
+	//Setter method to update the time variable
+	public void setTime (int newTime) {
+		timeGoing = newTime;
 	}
 }

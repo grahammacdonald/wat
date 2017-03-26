@@ -8,6 +8,7 @@ public class TileManager : MonoBehaviour {
     public GameObject[] fishes;
 
     private Transform playerTransform;
+	private GameObject player;
 	public NewTile spawner;
 
     //Constants
@@ -15,11 +16,13 @@ public class TileManager : MonoBehaviour {
 	private float spawnZ 				= 0.0f;
 	private int   tilesConstant			= 7;
 	private float tileLength			= 100;
+	private float time					= 0f;
 
 
 
     void Start () 
 	{
+		player 			= GameObject.FindGameObjectWithTag ("Player");
 		playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 		spawner         = gameObject.GetComponent<NewTile> ();
 		tiles           = new GameObject[15];
@@ -39,6 +42,12 @@ public class TileManager : MonoBehaviour {
 	
 	void Update () 
 	{
+
+		//Update time variable to count seconds
+		time += Time.deltaTime;
+		//Push time in seconds to player
+		player.GetComponent<Player>().setTime((int)Mathf.Floor(time));
+
 
 		playerTilePosition = spawnZ - (tilesConstant * tileLength);
 
