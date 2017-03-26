@@ -13,7 +13,7 @@ public class NewTile : MonoBehaviour {
 	}
 	
 
-	public GameObject SpawnTile(bool fish)
+	public GameObject SpawnTile(bool fish, int timeAlive)
 	{
 		GameObject go;
 		go = Instantiate (tilePrefab) as GameObject;
@@ -27,7 +27,7 @@ public class NewTile : MonoBehaviour {
 		return go;
 	}
 
-    public GameObject SpawnFish(Transform tile)
+    private GameObject SpawnFish(Transform tile)
     {
         GameObject go;
         go = Instantiate(fishPrefab) as GameObject;

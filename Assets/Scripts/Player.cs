@@ -25,13 +25,15 @@ public class Player : MonoBehaviour {
 
 	//Constants
 	private float 	animationDuration 	= 4.0f;
-	private float 	buoyancy 			= 0.5f;
-	private float 	speed 				= 10f;
+	public float 	buoyancy 			= 0.5f;
+	public float 	horSpeed 			= 10f;
+	public float 	verSpeed 			= 10f;
 	private float 	verticalVelocity	= 0f;
 	public float 	minWidth			= 0f;
 	public float 	maxWidth			= 10f;
     public float 	health				= 100f;
 	public float 	colourMult			= 10;
+	//private int 	difficulty			= 30;
 
 
 
@@ -61,7 +63,12 @@ public class Player : MonoBehaviour {
 		if (timeGoing > lastTime) {
 			lastTime = timeGoing;
 			health--;
+			if (timeGoing % 10 == 0) {
+				horSpeed ++;
+			}
 		}
+
+
 
 
 		//Does colour imbalance exist?
@@ -89,7 +96,7 @@ public class Player : MonoBehaviour {
 
 		if (Time.time < animationDuration) 
 		{
-			controller.Move (Vector3.forward * speed * Time.deltaTime);
+			controller.Move (Vector3.forward * horSpeed * Time.deltaTime);
 			return;
 		}
 
@@ -114,7 +121,9 @@ public class Player : MonoBehaviour {
 		 * Here we make a simple buoyancy function. When the object is not touching the ground, 
 		 * every second vertical velocity is increased. Otherwise, it is constant
 		*/
-		moveVector.y = Input.GetAxis("Vertical") * speed;
+		moveVector.y = Input.GetAxis("Vertical") * verSpeed;
+
+
 
 		if (controller.isGrounded) 
 		{
@@ -122,14 +131,17 @@ public class Player : MonoBehaviour {
 			//verticalVelocity = -0.01f;
 		} else 
 		{
-			verticalVelocity -= buoyancy * Time.deltaTime;
+			//verticalVelocity -= buoyancy * Time.deltaTime;
+			verticalVelocity = -1 * buoyancy;
 		}
 		moveVector.y += verticalVelocity;
 
 
 
 		// Z is for forward movement
-		moveVector.z = speed;
+		moveVector.z = horSpeed;
+
+
 
 		controller.Move(moveVector * Time.deltaTime);
 

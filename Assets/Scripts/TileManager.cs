@@ -32,9 +32,9 @@ public class TileManager : MonoBehaviour {
         for (int i = 0; i < tilesConstant; i++) 
 		{
 			if (i == 0)
-				SpawnTile (false);
+				SpawnTile (false, 0);
 			else
-				SpawnTile (true);
+				SpawnTile (true, 0);
 		}
 
 
@@ -71,7 +71,7 @@ public class TileManager : MonoBehaviour {
 	{
 		GameObject go;
 		//Calls spawner code to create a new tile ahead of object
-		go = spawner.SpawnTile (fish);
+		go = spawner.SpawnTile (fish, Mathf.FloorToInt(time));
 		go.transform.SetParent (transform);
 
 
