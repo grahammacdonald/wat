@@ -15,7 +15,7 @@ public class SpawnedFish : MonoBehaviour {
         //Parameters ColorHSV(float hueMin, float hueMax, float saturationMin, float saturationMax, float valueMin, float valueMax);
         fishColor                               = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
         GetComponent<Renderer>().material.color = fishColor;
-        health =  Random.Range(20f, 50f);
+        health =  Random.Range(10f, 20f);
     }
 
     void OnTriggerEnter(Collider other)
@@ -31,4 +31,9 @@ public class SpawnedFish : MonoBehaviour {
        
 
     }
+
+	//setter Method for fish colour.
+	public void setColour(Color colour){
+		fishColor = colour;
+	}
 }

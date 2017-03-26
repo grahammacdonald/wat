@@ -159,6 +159,9 @@ public class Player : MonoBehaviour {
 		//If health will effect the alpha, comment out above line and use the one below
 		smokeColour = new Color(red/100f, green/100f, blue/100f, health/100f);
 
+
+		//Behnam CHANGE THIS -> smokeDelay is the number of frames that pass before another smoke particle is created
+		//A higher number means less smoke/bubbles
 		if (framz > smokeDelay) {
 			var emitParams = new ParticleSystem.EmitParams ();
 			//Debug.Log (emitParams.position);
