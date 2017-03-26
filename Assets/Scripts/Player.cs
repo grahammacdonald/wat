@@ -230,4 +230,16 @@ public class Player : MonoBehaviour {
 	public void setTime (int newTime) {
 		timeGoing = newTime;
 	}
+
+	public int getMinColour () {
+		int colourOut;
+		if (red < green && red < blue)
+			colourOut = 0;
+		else if (green < red && green < blue)
+			colourOut = 1;
+		else
+			colourOut = 2;
+
+		return colourOut;
+	}
 }
