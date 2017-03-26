@@ -153,22 +153,22 @@ public class Player : MonoBehaviour {
 		oceanColor += color;
 
 		//hitting fish changes the colour attributes of the player representing colour which changes the smoke colour
-		red -= colourMult * color.r;
+		/*red -= colourMult * color.r;
 		green -= colourMult * color.g;
-		blue -= colourMult * color.b;
+		blue -= colourMult * color.b;*/
 
 
 		//if we want to only remove the largest colour aspect of the fish use the below code instead of above.
-		/*{
+		{
 			float r = color.r, g = color.g, b = color.b;
 			if (r > g && r > b)
-				red -= colourMult * color.r;
+				red -= colourMult;
 			else if (g > r && g > b)
-				green -= colourMult * color.g;
+				green -= colourMult;
 			else
-				blue -= colourMult * color.b;
+				blue -= colourMult;
 					
-		}*/
+		}
 
     }
 
