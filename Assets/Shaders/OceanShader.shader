@@ -47,12 +47,11 @@ Shader "Custom/OceanShader" {
 
 			//--------------Sine Wave Shader ---------------
 
-			float _Frequency	= 3;
-
 			// Independent Variable
 			float	_IV			= IN.uv_MainTex.x;
-
-			float	_Amplitude	= 3;
+			
+			float	_Frequency	= 1;
+			float	_Amplitude	= 0.1;
 			float	_PhaseShift	= _Time[1];
 			float2	_SineWave	= float2(0, _Amplitude* sin((_Frequency*_IV) + _PhaseShift));
 
